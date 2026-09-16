@@ -2,7 +2,13 @@
 import express from "express";
 import { Router } from "express";
 export const questionsRoutes = Router();
-import { buildPrompt, runApi, buildFeedbackPrompt ,validateTopic} from "../Gemini_api.js";
+import {
+  buildPrompt,
+  runApi,
+  buildFeedbackPrompt,
+  validateTopic,
+  basicTopicValidation,
+} from "../Gemini_api.js";
 import { questionsModel } from "../models/questions-model.js";
 import mongoose from "mongoose";
 questionsRoutes.post("/generate/:id", async (req, res) => {
@@ -14,9 +20,21 @@ questionsRoutes.post("/generate/:id", async (req, res) => {
        BASIC VALIDATION
     ========================= */
 
-    if (!topic || topic.trim().length < 3) {
+    if (!topic || !basicTopicValidation(topic)) {
       return res.status(400).json({
         message: "Please enter a valid topic",
+      });
+    }
+
+    if (!difficultyLevel) {
+      return res.status(400).json({
+        message: "Please select a difficulty level",
+      });
+    }
+
+    if (!numberOfQuestions || Number(numberOfQuestions) < 1) {
+      return res.status(400).json({
+        message: "Please enter a valid number of questions",
       });
     }
 
@@ -71,7 +89,9 @@ questionsRoutes.post("/generate/:id", async (req, res) => {
       topic,
       difficultyLevel,
       numberQuestions: numberOfQuestions,
-      questions: parsed.slice(0, numberOfQuestions).map((item) => item.question),
+      questions: parsed
+        .slice(0, numberOfQuestions)
+        .map((item) => item.question),
       options: {
         userOptions: [],
         correctOptions: parsed

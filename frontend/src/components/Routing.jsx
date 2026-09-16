@@ -47,20 +47,16 @@ function Routing() {
         {
           path: "quiz",
           element: (
-          
               <Suspense>
                 <Quiz></Quiz>
-              </Suspense>
-           
+              </Suspense>         
           ),
         },
         {
           path: "history",
           element: (
-            <ProtectedRoute>
-             
+            <ProtectedRoute>   
                 <History></History>
-             
             </ProtectedRoute>
           ),
         },
@@ -112,7 +108,7 @@ function Routing() {
           path: "entire-quiz-details",
           element: (
             <ProtectedRoute>
-              <Suspense>
+              <Suspense >
                 <EntireQuizDetails></EntireQuizDetails>
               </Suspense>
             </ProtectedRoute>

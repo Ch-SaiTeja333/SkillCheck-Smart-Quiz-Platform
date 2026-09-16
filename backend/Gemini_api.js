@@ -46,10 +46,16 @@ export const basicTopicValidation = (topic) => {
 ================================= */
 
 export const validateTopic = async (topic) => {
+  const cleanTopic = (topic ?? "").trim();
+
+  if (!basicTopicValidation(cleanTopic)) {
+    return false;
+  }
+
   const prompt = `
 Determine if the following text is a valid academic or professional topic.
 
-Topic: "${topic}"
+Topic: "${cleanTopic}"
 
 Valid examples:
 Math
@@ -73,14 +79,25 @@ Return ONLY JSON:
 }
 `;
 
-  const response = await runApi(prompt);
-
   try {
-    const clean = response.replace(/```json|```/g, "");
+    const response = await runApi(prompt);
+
+    if (!response) {
+      console.warn(
+        "Topic validation fallback enabled because AI validation failed.",
+      );
+      return true;
+    }
+
+    const clean = response.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(clean);
-    return parsed.valid;
-  } catch {
-    return false;
+    return parsed.valid === true;
+  } catch (error) {
+    console.warn(
+      "Topic validation parse failed; allowing topic as valid fallback.",
+      error.message,
+    );
+    return true;
   }
 };
 

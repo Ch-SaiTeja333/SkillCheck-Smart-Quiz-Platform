@@ -7,8 +7,7 @@ import { useAuthStore } from "../store/authStore";
 import { Link } from "react-router-dom";
 
 function Register() {
-  const navigate = useNavigate();
-
+  const navigate = useNavigate(); 
   const {
     register,
     handleSubmit,
@@ -16,7 +15,7 @@ function Register() {
   } = useForm();
 
   const { setUser } = useAuthStore();
-
+  
   async function submitForm(data) {
     try {
       let res = await axios.post(

@@ -67,10 +67,12 @@ userRoutes.post("/login", async (req, res) => {
     // console.log('....',newUserDetails)
     let token = sign({ payload: newUserDetails }, "abcde", { expiresIn: "1d" });
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "none",
-      secure: true,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
     });
     // console.log("newuser login...... ",newUserDetails);
     return res.status(200).json({
@@ -91,10 +93,12 @@ userRoutes.post("/login", async (req, res) => {
 //*LOGOUT
 userRoutes.post("/logout", verifyToken, (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "none",
-      secure: true,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
     });
     return res.status(204).json({
       message: "user logged out successfully",
@@ -125,16 +129,19 @@ userRoutes.get("/me", verifyToken, (req, res) => {
 //* Get userName
 userRoutes.post("/getUserName", async (req, res) => {
   try {
-    const {email} = req.body;
+    const { email } = req.body;
     // console.log(email);
-    const record = await userModel.findOne({email});
-    // console.log(record);  
+    const record = await userModel.findOne({ email });
+    // console.log(record);
     if (!record) {
       return res.status(404).json({ message: "User not found" });
     }
     res
       .status(200)
-      .json({ message: "User name fetched successfully", payload: record.userName });
+      .json({
+        message: "User name fetched successfully",
+        payload: record.userName,
+      });
   } catch (err) {
     console.log("err in getting user name--user-api Backend...", err.message);
   }

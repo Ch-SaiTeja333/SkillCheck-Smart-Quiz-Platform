@@ -24,7 +24,6 @@ function Login() {
           withCredentials: true,
         },
       );
-
       if (res.status === 200) {
         toast.success(res.data.message);
         setUser(res.data.payload);
@@ -56,7 +55,6 @@ function Login() {
             }}
           >
             <h3 className="text-center mb-4">Login</h3>
-
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
                 Email

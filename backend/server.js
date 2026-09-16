@@ -32,9 +32,23 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 
+const allowedOrigins = [
+  "https://skillcheck-ai-project-groq-1.onrender.com",
+  "https://skillcheck-ai-project-groq.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:5174",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: "https://skillcheck-ai-project-groq-1.onrender.com",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
