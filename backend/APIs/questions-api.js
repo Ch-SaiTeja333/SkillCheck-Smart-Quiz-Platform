@@ -39,15 +39,14 @@ questionsRoutes.post("/generate/:id", async (req, res) => {
     }
 
     /* =========================
-       AI TOPIC VALIDATION
+       TOPIC VALIDATION
+       Accept any meaningful subject/topic text so the quiz can cover the user's chosen subject.
     ========================= */
 
-    const validTopic = await validateTopic(topic);
-
-    if (!validTopic) {
+    const cleanedTopic = topic.trim();
+    if (cleanedTopic.length < 3) {
       return res.status(400).json({
-        message:
-          "The entered topic is not recognized as a valid academic or professional subject.",
+        message: "Please enter a valid topic",
       });
     }
 
@@ -55,7 +54,11 @@ questionsRoutes.post("/generate/:id", async (req, res) => {
        GENERATE QUESTIONS
     ========================= */
 
-    const prompt = buildPrompt(topic, difficultyLevel, numberOfQuestions);
+    const prompt = buildPrompt(
+      cleanedTopic,
+      difficultyLevel,
+      numberOfQuestions,
+    );
 
     const aiResponse = await runApi(prompt);
 
@@ -86,7 +89,7 @@ questionsRoutes.post("/generate/:id", async (req, res) => {
 
     const questionsData = {
       userId: id,
-      topic,
+      topic: cleanedTopic,
       difficultyLevel,
       numberQuestions: numberOfQuestions,
       questions: parsed
