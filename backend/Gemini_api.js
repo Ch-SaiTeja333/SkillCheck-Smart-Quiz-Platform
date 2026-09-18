@@ -10,7 +10,8 @@ export const runApi = async (promptText) => {
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-        model: "llama-3.3-70b-versatile",
+        // model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         messages: [{ role: "user", content: promptText }],
         temperature: 0.7,
       },
@@ -64,7 +65,6 @@ SQL
 React
 Machine Learning
 Cardiology
-Physics
 
 Invalid examples:
 abc
@@ -250,22 +250,22 @@ const quiz = {
    TEST QUESTION GENERATION
 ================================= */
 
-const topic = "abcdef";
+// const topic = "abcdef";
 
-if (!basicTopicValidation(topic)) {
-  console.log("Invalid topic");
-} else {
-  const valid = await validateTopic(topic);
+// if (!basicTopicValidation(topic)) {
+//   console.log("Invalid topic");
+// } else {
+//   const valid = await validateTopic(topic);
 
-  if (!valid) {
-    console.log("Topic not recognized");
-  } else {
-    const prompt = buildPrompt(topic, "MEDIUM", 5);
+//   if (!valid) {
+//     console.log("Topic not recognized");
+//   } else {
+//     const prompt = buildPrompt(topic, "MEDIUM", 5);
 
-    const questions = await runApi(prompt);
+//     const questions = await runApi(prompt);
 
-    const parsed = parseAIJSON(questions);
+//     const parsed = parseAIJSON(questions);
 
-    console.log(parsed);
-  }
-}
+//     console.log(parsed);
+//   }
+// }
