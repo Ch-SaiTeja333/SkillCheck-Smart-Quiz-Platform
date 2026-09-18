@@ -2,7 +2,7 @@
 
 SkillCheck AI is an **AI-powered quiz generation platform** that allows users to test their knowledge in different subjects using dynamically generated questions.
 
-The system uses **Groq's LLaMA-3.3-70B model** to generate multiple-choice questions and provide intelligent feedback based on user performance.
+The system uses **Groq's openai/gpt-oss-120b** to generate multiple-choice questions and provide intelligent feedback based on user performance.
 
 ---
 
@@ -57,7 +57,7 @@ Try the application directly in your browser without installing anything.
 - Model used:
 
 ```
-llama-3.3-70b-versatile
+openai/gpt-oss-120b
 ```
 
 ---
@@ -162,6 +162,7 @@ PORT=8080
 
 ```
 cd backend
+nodemon server
 npm run dev
 ```
 
@@ -200,7 +201,7 @@ Example Request:
 
 ```
 {
- "model": "llama-3.3-70b-versatile",
+ "model": "openai/gpt-oss-120b",
  "messages": [
    {
      "role": "user",
